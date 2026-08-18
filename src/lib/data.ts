@@ -8,7 +8,7 @@ export const site = {
     "I build production AI systems end to end — voice agents, event-driven backends, and the interfaces that run them.",
   location: "Bengaluru, Karnataka, India",
   email: "ajaykumarkc03@gmail.com",
-  url: "https://ajaykumarkc.vercel.app",
+  url: "https://ajay-portfolio-six.vercel.app",
   links: {
     github: "https://github.com/ajaykumarkc",
     linkedin: "https://www.linkedin.com/in/ajay-kumar-koilathachetta-369675252",
