@@ -475,6 +475,7 @@ export function VoiceWaveform() {
       canvas.style.width = "100%";
       canvas.style.height = "64px";
       canvas.style.maxHeight = "64px";
+      canvas.style.display = "block";
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
@@ -577,36 +578,39 @@ export function VoiceWaveform() {
         }}
         className="voice-wave-hit touch-manipulation"
       >
-        <canvas
-          ref={canvasRef}
-          aria-hidden="true"
-          className="voice-wave-canvas"
-        />
+        <span className="voice-wave-canvas-wrap">
+          <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            className="voice-wave-canvas"
+          />
+        </span>
       </button>
       <div
         id="voice-waveform-caption"
+        data-caption-rev="c3-zen"
         aria-live="polite"
         className="voice-wave-caption"
       >
-        <p>
+        <p style={{ color: "#e8e8ea" }}>
           {mode === "idle" && (
-            <span aria-hidden="true" className="caret-blink text-accent">
+            <span aria-hidden="true" className="caret-blink voice-wave-mark">
               ▍
             </span>
           )}
           {mode === "idle" ? " " : null}
-          {mode === "live" ? <span className="text-accent">● </span> : null}
+          {mode === "live" ? (
+            <span className="voice-wave-mark">● </span>
+          ) : null}
           {liveCaption}
         </p>
         {showPrivacyNote ? (
-          <p className="mt-1">audio stays in this tab</p>
+          <p className="voice-wave-privacy" style={{ color: "#c4c4cc" }}>
+            audio stays in this tab
+          </p>
         ) : null}
         {shownLine ? (
-          <p
-            className={`mt-1 line-clamp-2 ${
-              transcript ? "text-muted" : "text-faint"
-            }`}
-          >
+          <p className="mt-1 line-clamp-2" style={{ color: "#e8e8ea" }}>
             {shownLine}
           </p>
         ) : null}

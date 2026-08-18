@@ -101,8 +101,8 @@ export default function Home() {
           </Reveal>
         </header>
 
-        {/* Right column — content (above sticky header so Firefox cannot cover the footer) */}
-        <main className="relative z-[1] pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
+        {/* Right column — overflow visible so footer captions are never clipped. */}
+        <main className="relative z-[1] overflow-visible pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
           {/* About */}
           <Reveal as="section" id="about" className="scroll-mt-28">
             <SectionHeading>About</SectionHeading>
@@ -262,7 +262,7 @@ export default function Home() {
           </Reveal>
 
           {/* Easter egg — interactive voice waveform (no Reveal: parent opacity:0 would hide captions) */}
-          <footer className="relative z-[1] mt-24">
+          <footer className="relative z-20 mt-24 overflow-visible">
             <VoiceWaveform />
           </footer>
         </main>
