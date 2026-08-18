@@ -34,7 +34,7 @@ export function Spotlight() {
     <div
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 transition-colors duration-300"
+      className="pointer-events-none fixed inset-0 -z-10 mix-blend-normal"
     />
   );
 }

@@ -556,7 +556,7 @@ export function VoiceWaveform() {
   const showPrivacyNote = mode === "idle" || mode === "requesting";
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className="relative">
       <button
         type="button"
         aria-label={ariaLabelFor(mode)}
@@ -571,17 +571,19 @@ export function VoiceWaveform() {
         onPointerLeave={() => {
           pointerX.current = null;
         }}
-        className="block w-full cursor-pointer touch-manipulation appearance-none rounded-md border-0 bg-transparent p-0 shadow-none outline-none hover:bg-transparent hover:no-underline hover:shadow-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent/50"
+        className="relative z-0 block w-full cursor-pointer touch-manipulation appearance-none rounded-md border-0 bg-transparent p-0 shadow-none outline-none hover:bg-transparent hover:no-underline hover:shadow-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent/50"
       >
-        <canvas
-          ref={canvasRef}
-          aria-hidden="true"
-          className="block h-16 w-full"
-        />
+        <span className="block h-16 w-full overflow-hidden">
+          <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            className="block h-16 max-h-16 w-full"
+          />
+        </span>
       </button>
       <div
         aria-live="polite"
-        className="mt-3 font-mono text-[0.7rem] leading-snug tracking-wide text-faint"
+        className="relative isolate z-10 mt-3 font-mono text-xs leading-relaxed tracking-wide text-muted [text-shadow:0_0_12px_var(--background)]"
       >
         <div className="flex flex-col items-start gap-1">
           <p>
@@ -598,13 +600,7 @@ export function VoiceWaveform() {
           </p>
           {showPrivacyNote ? <p>audio stays in this tab</p> : null}
           {shownLine ? (
-            <p
-              className={`line-clamp-2 ${
-                transcript ? "text-muted" : "text-faint"
-              }`}
-            >
-              {shownLine}
-            </p>
+            <p className="line-clamp-2">{shownLine}</p>
           ) : null}
         </div>
       </div>

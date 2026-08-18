@@ -35,7 +35,7 @@ function SectionHeading({ children }: { children: string }) {
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div className="relative isolate bg-background">
       <Spotlight />
 
       <a
@@ -263,7 +263,7 @@ export default function Home() {
           </Reveal>
 
           {/* Easter egg — interactive voice waveform */}
-          <footer className="mt-24">
+          <footer className="relative z-10 mt-24">
             <Reveal delay={100}>
               <VoiceWaveform />
             </Reveal>
