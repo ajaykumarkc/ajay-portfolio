@@ -154,6 +154,15 @@ body {
   color: #e8e8ea;
 }
 
+.voice-wave-caption .voice-wave-transcript {
+  color: #e8e8ea;
+}
+
+.voice-wave-caption.has-transcript .voice-wave-status {
+  margin-top: 6px;
+  color: #c4c4cc;
+}
+
 .voice-wave-caption .voice-wave-privacy {
   margin-top: 4px;
   color: #c4c4cc;
@@ -166,6 +175,8 @@ body {
 @media (forced-colors: active) {
   .voice-wave-caption,
   .voice-wave-caption p,
+  .voice-wave-caption .voice-wave-transcript,
+  .voice-wave-caption .voice-wave-status,
   .voice-wave-caption .voice-wave-privacy {
     color: CanvasText;
   }

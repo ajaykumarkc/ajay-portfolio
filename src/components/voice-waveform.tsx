@@ -14,7 +14,6 @@ const BAR_WIDTH = 2.5;
 const BAR_GAP = 3;
 const STEP = BAR_WIDTH + BAR_GAP;
 const FFT_SIZE = 256;
-const ECHO_MS = 4000;
 const REDUCED_LIVE_MS = 140;
 
 type Mode = "idle" | "requesting" | "live" | "denied";
@@ -81,7 +80,6 @@ export function VoiceWaveform() {
   const session = useRef(0);
   const modeRef = useRef<Mode>("idle");
   const transcriptRef = useRef("");
-  const echoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const timeDomainRef = useRef<Uint8Array<ArrayBuffer> | null>(null);
   const anim = useRef({
@@ -100,7 +98,6 @@ export function VoiceWaveform() {
 
   const [mode, setMode] = useState<Mode>("idle");
   const [transcript, setTranscript] = useState("");
-  const [echo, setEcho] = useState("");
 
   const setModeSafe = useCallback((next: Mode) => {
     modeRef.current = next;
@@ -110,13 +107,6 @@ export function VoiceWaveform() {
   const setTranscriptSafe = useCallback((text: string) => {
     transcriptRef.current = text;
     if (!unmounted.current) setTranscript(text);
-  }, []);
-
-  const clearEchoTimer = useCallback(() => {
-    if (echoTimer.current) {
-      clearTimeout(echoTimer.current);
-      echoTimer.current = null;
-    }
   }, []);
 
   const releaseAudio = useCallback(() => {
@@ -149,27 +139,13 @@ export function VoiceWaveform() {
 
   const teardown = useCallback(
     (next: "idle" | "denied") => {
-      const leavingLive = modeRef.current === "live";
-      const lastLine = transcriptRef.current;
       session.current += 1;
       releaseAudio();
       setTranscriptSafe("");
-
-      if (next === "idle" && leavingLive && lastLine && !unmounted.current) {
-        setEcho(lastLine);
-        clearEchoTimer();
-        echoTimer.current = setTimeout(() => {
-          if (!unmounted.current) setEcho("");
-          echoTimer.current = null;
-        }, ECHO_MS);
-      } else if (!unmounted.current) {
-        setEcho("");
-      }
-
       setModeSafe(next);
       if (reducedMotion.current) anim.current.drawStatic();
     },
-    [clearEchoTimer, releaseAudio, setModeSafe, setTranscriptSafe]
+    [releaseAudio, setModeSafe, setTranscriptSafe]
   );
 
   useEffect(() => {
@@ -199,7 +175,9 @@ export function VoiceWaveform() {
         /* optional local STT — waveform keeps running */
       };
       recognition.onend = () => {
-        if (session.current !== token || modeRef.current !== "live") return;
+        if (session.current !== token) return;
+        setTranscriptSafe("");
+        if (modeRef.current !== "live") return;
         try {
           recognition.start();
         } catch {
@@ -219,8 +197,6 @@ export function VoiceWaveform() {
 
   const beginListen = useCallback(async () => {
     const token = ++session.current;
-    clearEchoTimer();
-    if (!unmounted.current) setEcho("");
     setTranscriptSafe("");
 
     const AudioCtx = audioContextCtor();
@@ -297,13 +273,7 @@ export function VoiceWaveform() {
 
     setModeSafe("live");
     anim.current.start();
-  }, [
-    clearEchoTimer,
-    releaseAudio,
-    setModeSafe,
-    setTranscriptSafe,
-    startSpeechRecognition,
-  ]);
+  }, [releaseAudio, setModeSafe, setTranscriptSafe, startSpeechRecognition]);
 
   const spawnRipple = useCallback((clientX: number | null) => {
     const canvas = canvasRef.current;
@@ -544,12 +514,10 @@ export function VoiceWaveform() {
     unmounted.current = false;
     return () => {
       unmounted.current = true;
-      clearEchoTimer();
       teardownRef.current("idle");
     };
-  }, [clearEchoTimer]);
+  }, []);
 
-  const shownLine = transcript || echo;
   const liveCaption =
     mode === "denied"
       ? "mic blocked — waveform stays visual only"
@@ -588,11 +556,24 @@ export function VoiceWaveform() {
       </button>
       <div
         id="voice-waveform-caption"
-        data-caption-rev="c3-zen"
+        data-caption-rev="c4-stack"
         aria-live="polite"
-        className="voice-wave-caption"
+        className={
+          transcript ? "voice-wave-caption has-transcript" : "voice-wave-caption"
+        }
       >
-        <p style={{ color: "#e8e8ea" }}>
+        {transcript ? (
+          <p
+            className="voice-wave-transcript line-clamp-2"
+            style={{ color: "#e8e8ea" }}
+          >
+            {transcript}
+          </p>
+        ) : null}
+        <p
+          className="voice-wave-status"
+          style={{ color: transcript ? "#c4c4cc" : "#e8e8ea" }}
+        >
           {mode === "idle" && (
             <span aria-hidden="true" className="caret-blink voice-wave-mark">
               ▍
@@ -607,11 +588,6 @@ export function VoiceWaveform() {
         {showPrivacyNote ? (
           <p className="voice-wave-privacy" style={{ color: "#c4c4cc" }}>
             audio stays in this tab
-          </p>
-        ) : null}
-        {shownLine ? (
-          <p className="mt-1 line-clamp-2" style={{ color: "#e8e8ea" }}>
-            {shownLine}
           </p>
         ) : null}
       </div>
