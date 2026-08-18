@@ -1,7 +1,7 @@
 export const site = {
   name: "Ajay Kumar Koilathachetta",
   shortName: "Ajay Kumar",
-  title: "Software Engineer II · Founding Engineer",
+  title: "SDE 2 (Founding Engineer)",
   company: "Lenity Health",
   companyUrl: "https://www.linkedin.com/company/lenityhealth/",
   tagline:
@@ -18,7 +18,7 @@ export const site = {
 
 export const about = [
   "I'm a software engineer in Bengaluru, currently the founding engineer at Lenity Health, where I've built and architected a production AI voice-agent platform from scratch as the primary engineer on a two-person team — owning everything from system design and backend services to AI integrations and production infrastructure.",
-  "The platform turns unstructured phone conversations into structured intents, summaries, and automated clinical workflows for medical practices. In its first 90 days it processed over 2,500 production calls, and its event-driven pipeline has driven 100+ automated tele-encounters into eClinicalWorks since launch.",
+  "The platform turns unstructured phone conversations into structured intents, summaries, and automated clinical workflows for medical practices. In its first 30 days it processed over 2,500 production calls, and its event-driven pipeline has driven 100+ automated tele-encounters into eClinicalWorks since launch.",
   "Before Lenity, I shipped AI-powered reporting features at CAST Software and built inventory systems serving 500+ active users at Powerplay. I care about systems that hold up in production, interfaces that stay out of the way, and owning problems from architecture to deployment.",
 ];
 
@@ -37,13 +37,13 @@ export const experience: Experience[] = [
   {
     company: "Lenity Health",
     companyUrl: "https://www.linkedin.com/company/lenityhealth/",
-    role: "Software Engineer II · Founding Engineer",
+    role: "Software Engineer II",
     period: "Jan 2026 — Present",
     location: "Bengaluru",
     summary:
       "Built and architected a production AI voice-agent platform from scratch as the primary engineer on a 2-person team — owning system design, Java/Spring Boot services, React/TypeScript frontends, AI integrations, workflow automation, and production infrastructure.",
     highlights: [
-      "Built the Retell AI voice-agent pipeline and real-time operations dashboard — 2,500+ production calls processed in 90 days, converting unstructured conversations into structured intents, summaries, and actionable workflows for medical practices.",
+      "Built the Retell AI voice-agent pipeline and real-time operations dashboard — 2,500+ production calls processed in 30 days, converting unstructured conversations into structured intents, summaries, and actionable workflows for medical practices.",
       "Designed an event-driven workflow pipeline connecting AI-generated intent to downstream clinical automation, including structured payload generation and eClinicalWorks integration via Cyberdesk — 100+ automated tele-encounters since launch.",
       "Designed for concurrent voice workloads — 20 simultaneous AI calls on the current Retell configuration — with a modular architecture for onboarding new practices, intents, and workflows.",
       "Owned the complete engineering lifecycle: architecture, implementation, debugging, deployment, product decisions, and hiring in a high-autonomy 2-engineer org.",
@@ -124,7 +124,7 @@ export const achievements = [
 
 export const education = {
   school: "International Institute of Information Technology, Raipur",
-  degree: "B.Sc. in Computer Science",
+  degree: "B.Tech in Computer Science",
   period: "2021 — 2025",
   location: "Raipur, Chhattisgarh",
   detail: "CGPA 7.88 / 10",

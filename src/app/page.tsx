@@ -8,6 +8,7 @@ import {
 import { Nav } from "@/components/nav";
 import { Reveal } from "@/components/reveal";
 import { Spotlight } from "@/components/spotlight";
+import { VoiceWaveform } from "@/components/voice-waveform";
 import {
   about,
   achievements,
@@ -59,9 +60,8 @@ export default function Home() {
                 </span>
               </h1>
               <h2 className="mt-4 text-lg font-medium text-foreground/90">
-                {site.title.split("·")[0].trim()}{" "}
-                <span className="text-faint">·</span>{" "}
-                <span className="text-muted">Founding Engineer at</span>{" "}
+                {site.title}{" "}
+                <span className="text-muted">at</span>{" "}
                 <a
                   href={site.companyUrl}
                   target="_blank"
@@ -102,9 +102,9 @@ export default function Home() {
         </header>
 
         {/* Right column — content */}
-        <main className="pt-20 lg:w-[50%] lg:py-24 lg:pt-24">
+        <main className="pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
           {/* About */}
-          <Reveal as="section" id="about" className="scroll-mt-20">
+          <Reveal as="section" id="about" className="scroll-mt-28">
             <SectionHeading>About</SectionHeading>
             <div className="space-y-4 leading-relaxed">
               {about.map((paragraph) => (
@@ -114,16 +114,13 @@ export default function Home() {
           </Reveal>
 
           {/* Experience */}
-          <section id="experience" className="mt-24 scroll-mt-20">
+          <section id="experience" className="mt-24 scroll-mt-28">
             <SectionHeading>Experience</SectionHeading>
             <ol className="space-y-14">
               {experience.map((job, i) => (
                 <Reveal as="li" key={job.company} delay={i * 60}>
-                  <article className="group relative grid gap-3 md:grid-cols-[9.5rem_1fr] md:gap-6">
-                    <p className="font-mono text-xs uppercase tracking-wider text-faint md:pt-1">
-                      {job.period}
-                    </p>
-                    <div className="timeline-rule md:pl-6">
+                  <article className="group">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                       <h3 className="font-medium text-foreground">
                         <a
                           href={job.companyUrl}
@@ -138,37 +135,40 @@ export default function Home() {
                           <ArrowUpRightIcon className="h-3.5 w-3.5 shrink-0 translate-y-0.5 transition-transform duration-300 group-hover:-translate-y-0 group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-px" />
                         </a>
                       </h3>
-                      <p className="mt-0.5 font-mono text-xs text-faint">
-                        {job.location}
+                      <p className="shrink-0 font-mono text-xs uppercase tracking-wider text-faint">
+                        {job.period}
                       </p>
-                      <p className="mt-3 text-sm leading-relaxed">
-                        {job.summary}
-                      </p>
-                      <ul className="mt-3 space-y-2.5">
-                        {job.highlights.map((highlight) => (
-                          <li
-                            key={highlight.slice(0, 32)}
-                            className="flex gap-3 text-sm leading-relaxed"
-                          >
-                            <span
-                              aria-hidden="true"
-                              className="mt-[0.55rem] h-px w-3 shrink-0 bg-faint"
-                            />
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <ul className="mt-4 flex flex-wrap gap-2">
-                        {job.tags.map((tag) => (
-                          <li
-                            key={tag}
-                            className="rounded-full border border-edge bg-surface px-3 py-1 font-mono text-[0.7rem] text-muted transition-colors duration-300 group-hover:border-accent/30 group-hover:text-accent"
-                          >
-                            {tag}
-                          </li>
-                        ))}
-                      </ul>
                     </div>
+                    <p className="mt-0.5 font-mono text-xs text-faint">
+                      {job.location}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed">
+                      {job.summary}
+                    </p>
+                    <ul className="mt-3 space-y-2.5">
+                      {job.highlights.map((highlight) => (
+                        <li
+                          key={highlight.slice(0, 32)}
+                          className="flex gap-3 text-sm leading-relaxed"
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="mt-[0.55rem] h-px w-3 shrink-0 bg-faint"
+                          />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {job.tags.map((tag) => (
+                        <li
+                          key={tag}
+                          className="rounded-full border border-edge bg-surface px-3 py-1 font-mono text-[0.7rem] text-muted transition-colors duration-300 group-hover:border-accent/30 group-hover:text-accent"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
                   </article>
                 </Reveal>
               ))}
@@ -176,7 +176,7 @@ export default function Home() {
           </section>
 
           {/* Skills */}
-          <section id="skills" className="mt-24 scroll-mt-20">
+          <section id="skills" className="mt-24 scroll-mt-28">
             <SectionHeading>Skills</SectionHeading>
             <dl className="space-y-6 border-l border-edge pl-6">
               {skills.map((group, i) => (
@@ -193,7 +193,7 @@ export default function Home() {
           </section>
 
           {/* Achievements */}
-          <section id="achievements" className="mt-24 scroll-mt-20">
+          <section id="achievements" className="mt-24 scroll-mt-28">
             <SectionHeading>Achievements</SectionHeading>
             <ul className="space-y-4">
               {achievements.map((item, i) => (
@@ -221,29 +221,31 @@ export default function Home() {
           </section>
 
           {/* Education */}
-          <Reveal as="section" id="education" className="mt-24 scroll-mt-20">
+          <section id="education" className="mt-24 scroll-mt-28">
             <SectionHeading>Education</SectionHeading>
-            <div className="grid gap-3 md:grid-cols-[9.5rem_1fr] md:gap-6">
-              <p className="font-mono text-xs uppercase tracking-wider text-faint md:pt-1">
-                {education.period}
-              </p>
-              <div className="md:pl-6">
+            <Reveal>
+              <div>
                 <h3 className="font-medium text-foreground">
                   {education.school}
                 </h3>
-                <p className="mt-1 text-sm">
-                  {education.degree}{" "}
-                  <span className="text-faint">· {education.detail}</span>
-                </p>
+                <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="text-sm text-foreground/85">
+                    {education.degree}{" "}
+                    <span className="text-faint">·</span> {education.detail}
+                  </p>
+                  <p className="shrink-0 font-mono text-xs uppercase tracking-wider text-faint">
+                    {education.period}
+                  </p>
+                </div>
                 <p className="mt-0.5 font-mono text-xs text-faint">
                   {education.location}
                 </p>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </section>
 
-          {/* Contact / footer */}
-          <Reveal as="section" className="mt-28">
+          {/* Contact */}
+          <Reveal as="section" id="contact" className="mt-28">
             <h2 className="text-2xl font-semibold tracking-tight text-foreground">
               Get in touch
             </h2>
@@ -258,40 +260,14 @@ export default function Home() {
               {site.email}
               <ArrowUpRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
-
-            <footer className="mt-20 border-t border-edge pt-8 pb-4 text-xs leading-relaxed text-faint">
-              <p>
-                Designed &amp; built by {site.name}. Set in{" "}
-                <a
-                  href="https://vercel.com/font"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-underline text-muted"
-                >
-                  Geist
-                </a>
-                . Built with{" "}
-                <a
-                  href="https://nextjs.org"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-underline text-muted"
-                >
-                  Next.js
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://tailwindcss.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-underline text-muted"
-                >
-                  Tailwind CSS
-                </a>
-                , deployed on Vercel.
-              </p>
-            </footer>
           </Reveal>
+
+          {/* Easter egg — interactive voice waveform */}
+          <footer className="mt-24">
+            <Reveal delay={100}>
+              <VoiceWaveform />
+            </Reveal>
+          </footer>
         </main>
       </div>
     </div>

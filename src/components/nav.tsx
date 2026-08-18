@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 const sections = [
   { id: "about", label: "About" },
@@ -10,29 +10,106 @@ const sections = [
   { id: "education", label: "Education" },
 ] as const;
 
+const LAST_ID = sections[sections.length - 1].id;
+const BOTTOM_THRESHOLD_PX = 160;
+const SPY_LINE_RATIO = 0.3;
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function documentScrollHeight() {
+  const { body, documentElement: html } = document;
+  return Math.max(
+    html.scrollHeight,
+    html.offsetHeight,
+    body?.scrollHeight ?? 0,
+    body?.offsetHeight ?? 0
+  );
+}
+
 export function Nav() {
   const [active, setActive] = useState<string>("about");
+  const lockRef = useRef<string | null>(null);
+  const unlockTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
-        }
-      },
-      // A narrow horizontal band near the top of the viewport decides the
-      // active section, which feels right while scrolling in either direction.
-      { rootMargin: "-20% 0px -70% 0px" }
-    );
+    const syncActive = () => {
+      if (lockRef.current) return;
 
-    for (const { id } of sections) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
+      if (
+        window.scrollY + window.innerHeight >=
+        documentScrollHeight() - BOTTOM_THRESHOLD_PX
+      ) {
+        setActive(LAST_ID);
+        return;
+      }
+
+      const threshold = window.innerHeight * SPY_LINE_RATIO;
+      let current: string = sections[0].id;
+
+      for (const { id } of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= threshold) {
+          current = id;
+        }
+      }
+
+      const contact = document.getElementById("contact");
+      if (contact && contact.getBoundingClientRect().top <= threshold) {
+        current = LAST_ID;
+      }
+
+      setActive(current);
+    };
+
+    window.addEventListener("scroll", syncActive, { passive: true });
+    window.addEventListener("resize", syncActive);
+    syncActive();
+
+    return () => {
+      window.removeEventListener("scroll", syncActive);
+      window.removeEventListener("resize", syncActive);
+      if (unlockTimer.current !== null) window.clearTimeout(unlockTimer.current);
+    };
   }, []);
+
+  const onNavClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    event.preventDefault();
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    lockRef.current = id;
+    setActive(id);
+
+    const reduced = prefersReducedMotion();
+    el.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start",
+    });
+    history.replaceState(null, "", `#${id}`);
+
+    const unlock = () => {
+      lockRef.current = null;
+      if (unlockTimer.current !== null) {
+        window.clearTimeout(unlockTimer.current);
+        unlockTimer.current = null;
+      }
+      window.removeEventListener("scrollend", unlock);
+    };
+
+    if (reduced) {
+      unlock();
+      return;
+    }
+
+    window.addEventListener("scrollend", unlock, { once: true });
+    unlockTimer.current = window.setTimeout(unlock, 1000);
+  };
 
   return (
     <nav aria-label="In-page navigation" className="hidden lg:block">
@@ -43,6 +120,7 @@ export function Nav() {
             <li key={id}>
               <a
                 href={`#${id}`}
+                onClick={(event) => onNavClick(event, id)}
                 className="group flex items-center gap-4 py-2"
                 aria-current={isActive ? "true" : undefined}
               >

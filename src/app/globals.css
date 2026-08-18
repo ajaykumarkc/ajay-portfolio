@@ -66,6 +66,23 @@ body {
   }
 }
 
+/* Blinking caret for the voice-waveform easter egg */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.caret-blink {
+  animation: caret-blink 1.2s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret-blink {
+    animation: none;
+  }
+}
+
 /* Animated underline for inline links */
 .link-underline {
   background-image: linear-gradient(currentColor, currentColor);
@@ -78,25 +95,4 @@ body {
 .link-underline:hover,
 .link-underline:focus-visible {
   background-size: 100% 1px;
-}
-
-/* Timeline hairline between experience entries */
-.timeline-rule {
-  position: relative;
-}
-
-.timeline-rule::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55rem;
-  bottom: -2.5rem;
-  width: 1px;
-  background: linear-gradient(to bottom, var(--edge), transparent);
-}
-
-@media (max-width: 767px) {
-  .timeline-rule::before {
-    display: none;
-  }
 }
