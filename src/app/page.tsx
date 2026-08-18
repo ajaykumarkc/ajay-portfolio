@@ -45,10 +45,9 @@ export default function Home() {
         Skip to content
       </a>
 
-      <div className="page-shell relative z-[1] mx-auto min-h-screen max-w-6xl px-6 py-14 md:px-12 md:py-20 lg:flex lg:items-start lg:justify-between lg:gap-6 lg:px-16 lg:py-0">
-        {/* Left column — sticky intro. self-start + overflow hidden so a
-            stretched sticky layer cannot cover the right-column footer. */}
-        <header className="page-header lg:sticky lg:top-0 lg:flex lg:h-screen lg:max-h-screen lg:w-[44%] lg:flex-col lg:justify-between lg:py-24">
+      <div className="relative z-[1] mx-auto min-h-screen max-w-6xl px-6 py-14 md:px-12 md:py-20 lg:flex lg:items-start lg:justify-between lg:gap-6 lg:px-16 lg:py-0">
+        {/* Left column — sticky intro */}
+        <header className="lg:sticky lg:top-0 lg:z-0 lg:flex lg:max-h-screen lg:w-[44%] lg:flex-col lg:justify-between lg:py-24">
           <div>
             <Reveal>
               <p className="mb-4 font-mono text-xs uppercase tracking-[0.25em] text-accent">
@@ -102,9 +101,8 @@ export default function Home() {
           </Reveal>
         </header>
 
-        {/* Right column — content. overflow visible so footer captions are
-            never clipped by the two-column shell. */}
-        <main className="page-main pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
+        {/* Right column — content (above sticky header so Firefox cannot cover the footer) */}
+        <main className="relative z-[1] pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
           {/* About */}
           <Reveal as="section" id="about" className="scroll-mt-28">
             <SectionHeading>About</SectionHeading>
@@ -264,9 +262,8 @@ export default function Home() {
             </a>
           </Reveal>
 
-          {/* Easter egg — interactive voice waveform (no Reveal: opacity:0
-              on a parent would hide the caption even as a canvas sibling) */}
-          <footer className="page-egg mt-24">
+          {/* Easter egg — interactive voice waveform (no Reveal: parent opacity:0 would hide captions) */}
+          <footer className="relative z-[1] mt-24">
             <VoiceWaveform />
           </footer>
         </main>

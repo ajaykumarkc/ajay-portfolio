@@ -66,78 +66,38 @@ body {
   }
 }
 
-/* Pointer glow stays behind ALL page content, including the footer.
-   No mix-blend (Firefox/Zen would composite it over muted text). */
+/* Pointer glow stays behind page content. No mix-blend — Firefox/Zen
+   would composite it over muted caption text. */
 .pointer-spotlight {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  isolation: isolate;
-  mix-blend-mode: normal;
 }
 
-/* Right-column footer must paint above the sticky left header. Firefox
-   promotes sticky flex items onto their own layer and can cover siblings. */
-.page-shell {
-  overflow: visible;
-}
-
-.page-header {
-  overflow: visible;
-}
-
-@media (min-width: 64rem) {
-  .page-header {
-    z-index: 0;
-    align-self: flex-start;
-    overflow: hidden;
-  }
-}
-
-.page-main,
-.page-egg {
-  position: relative;
-  z-index: 2;
-  overflow: visible;
-}
-
-/* Click-to-talk wave. Firefox/Zen: canvas backing-store (dpr×height) can
-   paint past the CSS box and cover HTML captions; clip + isolate + captions
-   stacked above the canvas with near-white color. */
+/* Click-to-talk wave. Canvas is clipped to 64px; captions follow in flow. */
 .voice-wave {
   position: relative;
-  z-index: 20;
-  isolation: isolate;
-  overflow: visible;
 }
 
 .voice-wave-hit {
   appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  z-index: 0;
   display: block;
   width: 100%;
+  height: 4rem;
   max-height: 4rem;
   margin: 0;
   padding: 0;
   overflow: hidden;
   border: 0;
   background: transparent;
-  color: inherit;
-  text-align: left;
   cursor: pointer;
-  font: inherit;
-  box-shadow: none;
 }
 
 .voice-wave-hit:hover,
 .voice-wave-hit:focus,
 .voice-wave-hit:active {
   background: transparent;
-  color: inherit;
   box-shadow: none;
 }
 
@@ -146,21 +106,8 @@ body {
   outline-offset: 8px;
 }
 
-.voice-wave-canvas-wrap {
-  display: block;
-  overflow: hidden;
-  overflow: clip;
-  contain: paint;
-  isolation: isolate;
-  width: 100%;
-  height: 4rem;
-  max-height: 4rem;
-  pointer-events: none;
-}
-
 .voice-wave-canvas {
   display: block;
-  vertical-align: top;
   width: 100%;
   height: 4rem;
   max-height: 4rem;
@@ -169,52 +116,24 @@ body {
 
 .voice-wave-caption {
   position: relative;
-  z-index: 20;
-  isolation: isolate;
-  display: block;
-  margin: 0 0 0.75rem;
-  padding-top: 0.25rem;
-  min-height: 2.75rem;
-  overflow: visible;
+  z-index: 1;
+  margin-top: 0.75rem;
   font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
     Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: #e8e8ea;
-  opacity: 1;
-  visibility: visible;
+  font-size: 0.7rem;
+  line-height: 1.375;
+  letter-spacing: 0.025em;
+  color: var(--faint);
 }
 
 .voice-wave-caption p {
   margin: 0;
-  color: #e8e8ea;
-  opacity: 1;
-  visibility: visible;
-}
-
-.voice-wave-caption .voice-wave-privacy {
-  margin-top: 4px;
-  color: #c4c4cc;
-}
-
-.voice-wave-caption .voice-wave-mark {
-  color: #d9b877;
-}
-
-@media (forced-colors: active) {
-  .voice-wave-caption,
-  .voice-wave-caption p,
-  .voice-wave-caption .voice-wave-privacy {
-    color: CanvasText;
-  }
 }
 
 /* Blinking caret for the voice-waveform easter egg (caret only, not copy) */
 @keyframes caret-blink {
   50% {
-    color: transparent;
+    opacity: 0;
   }
 }
 
