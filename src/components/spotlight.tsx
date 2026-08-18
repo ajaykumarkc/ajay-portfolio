@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A faint radial glow that follows the pointer. Disabled automatically on
+ * A brass radial glow that follows the pointer. Disabled automatically on
  * touch-only devices and under prefers-reduced-motion.
  */
 export function Spotlight() {
@@ -19,7 +19,7 @@ export function Spotlight() {
     const onMove = (e: PointerEvent) => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        el.style.background = `radial-gradient(560px at ${e.clientX}px ${e.clientY}px, rgba(217, 184, 119, 0.045), transparent 80%)`;
+        el.style.background = `radial-gradient(640px circle at ${e.clientX}px ${e.clientY}px, rgba(217, 184, 119, 0.11), rgba(217, 184, 119, 0.035) 42%, transparent 70%)`;
       });
     };
 
