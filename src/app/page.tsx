@@ -47,7 +47,7 @@ export default function Home() {
 
       <div className="relative z-[1] mx-auto min-h-screen max-w-6xl px-6 py-14 md:px-12 md:py-20 lg:flex lg:items-start lg:justify-between lg:gap-6 lg:px-16 lg:py-0">
         {/* Left column — sticky intro */}
-        <header className="lg:sticky lg:top-0 lg:z-0 lg:flex lg:max-h-screen lg:w-[44%] lg:flex-col lg:justify-between lg:py-24">
+        <header className="lg:sticky lg:top-0 lg:z-0 lg:flex lg:h-screen lg:max-h-screen lg:w-[44%] lg:flex-col lg:justify-between lg:py-24">
           <div>
             <Reveal>
               <p className="mb-4 font-mono text-xs uppercase tracking-[0.25em] text-accent">
@@ -81,8 +81,8 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <Reveal delay={250}>
-            <ul className="mt-12 flex items-center gap-5 lg:mt-0">
+          <Reveal delay={250} className="mt-12 lg:mt-auto lg:mb-4">
+            <ul className="flex items-center gap-5">
               {socials.map(({ label, href, Icon }) => (
                 <li key={label}>
                   <a
@@ -250,8 +250,7 @@ export default function Home() {
               Get in touch
             </h2>
             <p className="mt-3 max-w-md leading-relaxed">
-              I&apos;m always happy to talk about production AI systems,
-              event-driven architecture, or interesting engineering problems.
+              I&apos;m happy to get in touch — email&apos;s the best way.
             </p>
             <a
               href={`mailto:${site.email}`}
