@@ -470,7 +470,13 @@ export function VoiceWaveform() {
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       width = rect.width;
-      height = rect.height;
+      height = Math.min(rect.height || 64, 64);
+      // Lock CSS size so Firefox does not lay out from the dpr backing store
+      // (that overflow was covering the HTML captions on Zen/Mac).
+      canvas.style.width = "100%";
+      canvas.style.height = "64px";
+      canvas.style.maxHeight = "64px";
+      canvas.style.display = "block";
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
@@ -557,6 +563,36 @@ export function VoiceWaveform() {
 
   return (
     <div ref={rootRef} className="voice-wave">
+      {/* Captions sit ABOVE the canvas so a Firefox backing-store overflow
+          cannot paint over them. data-caption-rev verifies the latest deploy. */}
+      <div
+        id="voice-waveform-caption"
+        data-voice-caption=""
+        data-caption-rev="c3-zen"
+        aria-live="polite"
+        className="voice-wave-caption"
+      >
+        <p style={{ color: "#e8e8ea" }}>
+          {mode === "idle" && (
+            <span aria-hidden="true" className="caret-blink voice-wave-mark">
+              ▍
+            </span>
+          )}
+          {mode === "idle" ? " " : null}
+          {mode === "live" ? (
+            <span className="voice-wave-mark">● </span>
+          ) : null}
+          {liveCaption}
+        </p>
+        {showPrivacyNote ? (
+          <p className="voice-wave-privacy" style={{ color: "#c4c4cc" }}>
+            audio stays in this tab
+          </p>
+        ) : null}
+        {shownLine ? (
+          <p style={{ color: "#e8e8ea" }}>{shownLine}</p>
+        ) : null}
+      </div>
       <button
         type="button"
         aria-label={ariaLabelFor(mode)}
@@ -571,7 +607,7 @@ export function VoiceWaveform() {
         onPointerLeave={() => {
           pointerX.current = null;
         }}
-        className="voice-wave-hit relative z-0 touch-manipulation"
+        className="voice-wave-hit touch-manipulation"
       >
         <span className="voice-wave-canvas-wrap">
           <canvas
@@ -581,29 +617,6 @@ export function VoiceWaveform() {
           />
         </span>
       </button>
-      <div
-        id="voice-waveform-caption"
-        data-voice-caption=""
-        aria-live="polite"
-        className="voice-wave-caption"
-      >
-        <p>
-          {mode === "idle" && (
-            <span aria-hidden="true" className="caret-blink voice-wave-mark">
-              ▍
-            </span>
-          )}
-          {mode === "idle" ? " " : null}
-          {mode === "live" ? (
-            <span className="voice-wave-mark">● </span>
-          ) : null}
-          {liveCaption}
-        </p>
-        {showPrivacyNote ? (
-          <p className="voice-wave-privacy">audio stays in this tab</p>
-        ) : null}
-        {shownLine ? <p>{shownLine}</p> : null}
-      </div>
     </div>
   );
 }
