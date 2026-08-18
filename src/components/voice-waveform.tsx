@@ -10,7 +10,7 @@ import {
 } from "react";
 
 const ACCENT_RGB = "217, 184, 119";
-const BAR_WIDTH = 2;
+const BAR_WIDTH = 2.5;
 const BAR_GAP = 3;
 const STEP = BAR_WIDTH + BAR_GAP;
 const FFT_SIZE = 256;
@@ -355,9 +355,9 @@ export function VoiceWaveform() {
       ctx.clearRect(0, 0, width, height);
       const mid = height / 2;
       for (let i = 0; i < values.length; i++) {
-        const v = Math.min(1, Math.max(0.05, values[i]));
-        const h = Math.max(2, v * (height - 4));
-        ctx.fillStyle = `rgba(${ACCENT_RGB}, ${0.16 + v * 0.7})`;
+        const v = Math.min(1, Math.max(0.12, values[i]));
+        const h = Math.max(4, v * (height - 6));
+        ctx.fillStyle = `rgba(${ACCENT_RGB}, ${0.42 + v * 0.5})`;
         ctx.fillRect(i * STEP, mid - h / 2, BAR_WIDTH, h);
       }
     };
@@ -367,8 +367,8 @@ export function VoiceWaveform() {
       drawBars(
         Array.from({ length: heights.length }, (_, i) => {
           return (
-            0.1 +
-            0.4 *
+            0.18 +
+            0.28 *
               Math.abs(
                 Math.sin(i * 0.41 + s) * Math.sin(i * 0.153 + s * 1.7)
               )
@@ -396,11 +396,13 @@ export function VoiceWaveform() {
       const px = pointerX.current;
       for (let i = 0; i < heights.length; i++) {
         const x = i * STEP + BAR_WIDTH / 2;
-        let target = Math.abs(
-          0.08 +
-            0.06 * Math.sin(t * 1.4 + i * 0.35) * Math.sin(t * 0.7 + i * 0.11) +
-            0.04 * Math.sin(t * 2.3 - i * 0.18)
-        );
+        let target =
+          0.2 +
+          0.1 *
+            Math.abs(
+              Math.sin(t * 1.4 + i * 0.35) * Math.sin(t * 0.7 + i * 0.11)
+            ) +
+          0.06 * Math.abs(Math.sin(t * 2.3 - i * 0.18));
         if (px !== null) {
           const d = x - px;
           target += 0.75 * Math.exp(-(d * d) / (2 * 42 * 42));
@@ -476,7 +478,7 @@ export function VoiceWaveform() {
       const count = Math.max(1, Math.floor((width + BAR_GAP) / STEP));
       const prev = heights.length;
       heights.length = count;
-      for (let i = prev; i < count; i++) heights[i] = 0.12;
+      for (let i = prev; i < count; i++) heights[i] = 0.22;
       if (reducedMotion.current && modeRef.current !== "live") drawStatic();
       else if (modeRef.current !== "live") drawIdle(performance.now());
     };
@@ -569,7 +571,7 @@ export function VoiceWaveform() {
         onPointerLeave={() => {
           pointerX.current = null;
         }}
-        className="block w-full cursor-pointer touch-manipulation rounded-md p-0 shadow-[inset_0_-1px_0_0_transparent] transition-[filter,box-shadow] duration-300 hover:shadow-[inset_0_-1px_0_0_rgba(217,184,119,0.35)] hover:drop-shadow-[0_0_10px_rgba(217,184,119,0.12)] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent/50"
+        className="block w-full cursor-pointer touch-manipulation appearance-none rounded-md border-0 bg-transparent p-0 shadow-none outline-none hover:bg-transparent hover:no-underline hover:shadow-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent/50"
       >
         <canvas
           ref={canvasRef}
@@ -579,32 +581,32 @@ export function VoiceWaveform() {
       </button>
       <div
         aria-live="polite"
-        className="mt-3 font-mono text-[0.7rem] tracking-wide text-faint"
+        className="mt-3 font-mono text-[0.7rem] leading-snug tracking-wide text-faint"
       >
-        <p className="truncate">
-          {mode === "idle" && (
-            <span aria-hidden="true" className="caret-blink text-accent">
-              ▍
-            </span>
-          )}
-          {mode === "idle" ? " " : null}
-          {mode === "live" ? (
-            <span className="text-accent">● </span>
-          ) : null}
-          {liveCaption}
-        </p>
-        {showPrivacyNote ? (
-          <p className="mt-1 truncate">audio stays in this tab</p>
-        ) : null}
-        {shownLine ? (
-          <p
-            className={`mt-1 line-clamp-2 ${
-              transcript ? "text-muted" : "text-faint"
-            }`}
-          >
-            {shownLine}
+        <div className="flex flex-col items-start gap-1">
+          <p>
+            {mode === "idle" && (
+              <span aria-hidden="true" className="caret-blink text-accent">
+                ▍
+              </span>
+            )}
+            {mode === "idle" ? " " : null}
+            {mode === "live" ? (
+              <span className="text-accent">● </span>
+            ) : null}
+            {liveCaption}
           </p>
-        ) : null}
+          {showPrivacyNote ? <p>audio stays in this tab</p> : null}
+          {shownLine ? (
+            <p
+              className={`line-clamp-2 ${
+                transcript ? "text-muted" : "text-faint"
+              }`}
+            >
+              {shownLine}
+            </p>
+          ) : null}
+        </div>
       </div>
     </div>
   );
