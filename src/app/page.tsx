@@ -35,7 +35,7 @@ function SectionHeading({ children }: { children: string }) {
 
 export default function Home() {
   return (
-    <div className="relative isolate bg-background">
+    <div className="relative bg-background">
       <Spotlight />
 
       <a
@@ -45,7 +45,7 @@ export default function Home() {
         Skip to content
       </a>
 
-      <div className="relative z-10 mx-auto min-h-screen max-w-6xl px-6 py-14 md:px-12 md:py-20 lg:flex lg:justify-between lg:gap-6 lg:px-16 lg:py-0">
+      <div className="relative z-[1] mx-auto min-h-screen max-w-6xl px-6 py-14 md:px-12 md:py-20 lg:flex lg:justify-between lg:gap-6 lg:px-16 lg:py-0">
         {/* Left column — sticky intro */}
         <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[44%] lg:flex-col lg:justify-between lg:py-24">
           <div>
@@ -102,7 +102,7 @@ export default function Home() {
         </header>
 
         {/* Right column — content */}
-        <main className="pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
+        <main className="relative z-[1] pt-20 pb-24 lg:w-[50%] lg:pt-24 lg:pb-[45vh]">
           {/* About */}
           <Reveal as="section" id="about" className="scroll-mt-28">
             <SectionHeading>About</SectionHeading>
@@ -262,11 +262,10 @@ export default function Home() {
             </a>
           </Reveal>
 
-          {/* Easter egg — interactive voice waveform */}
-          <footer className="relative z-10 mt-24">
-            <Reveal delay={100}>
-              <VoiceWaveform />
-            </Reveal>
+          {/* Easter egg — interactive voice waveform (no Reveal: opacity:0
+              on a parent would hide the caption even as a canvas sibling) */}
+          <footer className="relative z-[1] mt-24">
+            <VoiceWaveform />
           </footer>
         </main>
       </div>

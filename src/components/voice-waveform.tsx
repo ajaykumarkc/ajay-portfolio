@@ -556,7 +556,7 @@ export function VoiceWaveform() {
   const showPrivacyNote = mode === "idle" || mode === "requesting";
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="voice-wave">
       <button
         type="button"
         aria-label={ariaLabelFor(mode)}
@@ -571,38 +571,38 @@ export function VoiceWaveform() {
         onPointerLeave={() => {
           pointerX.current = null;
         }}
-        className="relative z-0 block w-full cursor-pointer touch-manipulation appearance-none rounded-md border-0 bg-transparent p-0 shadow-none outline-none hover:bg-transparent hover:no-underline hover:shadow-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent/50"
+        className="voice-wave-hit relative z-0 touch-manipulation"
       >
-        <span className="block h-16 w-full overflow-hidden">
+        <span className="voice-wave-canvas-wrap">
           <canvas
             ref={canvasRef}
             aria-hidden="true"
-            className="block h-16 max-h-16 w-full"
+            className="voice-wave-canvas"
           />
         </span>
       </button>
       <div
+        id="voice-waveform-caption"
+        data-voice-caption=""
         aria-live="polite"
-        className="relative isolate z-10 mt-3 font-mono text-xs leading-relaxed tracking-wide text-muted [text-shadow:0_0_12px_var(--background)]"
+        className="voice-wave-caption"
       >
-        <div className="flex flex-col items-start gap-1">
-          <p>
-            {mode === "idle" && (
-              <span aria-hidden="true" className="caret-blink text-accent">
-                ▍
-              </span>
-            )}
-            {mode === "idle" ? " " : null}
-            {mode === "live" ? (
-              <span className="text-accent">● </span>
-            ) : null}
-            {liveCaption}
-          </p>
-          {showPrivacyNote ? <p>audio stays in this tab</p> : null}
-          {shownLine ? (
-            <p className="line-clamp-2">{shownLine}</p>
+        <p>
+          {mode === "idle" && (
+            <span aria-hidden="true" className="caret-blink voice-wave-mark">
+              ▍
+            </span>
+          )}
+          {mode === "idle" ? " " : null}
+          {mode === "live" ? (
+            <span className="voice-wave-mark">● </span>
           ) : null}
-        </div>
+          {liveCaption}
+        </p>
+        {showPrivacyNote ? (
+          <p className="voice-wave-privacy">audio stays in this tab</p>
+        ) : null}
+        {shownLine ? <p>{shownLine}</p> : null}
       </div>
     </div>
   );

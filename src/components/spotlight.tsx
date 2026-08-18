@@ -32,9 +32,10 @@ export function Spotlight() {
 
   return (
     <div
+      id="pointer-spotlight"
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 mix-blend-normal"
+      className="pointer-spotlight"
     />
   );
 }
